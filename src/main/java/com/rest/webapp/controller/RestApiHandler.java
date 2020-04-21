@@ -46,6 +46,7 @@ public class RestApiHandler extends HttpServlet {
 		RestAPIService restService = new RestAPIService();
 		jsonContentsMap.put("custId", req.getParameter("custId"));
 		jsonContentsMap.put("msisdn", req.getParameter("msisdn"));
+		jsonContentsMap.put("protype", req.getParameter("protype"));
 		String jsonData = mapper.writeValueAsString(jsonContentsMap);
 		String restPath=restPathPre+restCallStartTaskKey+restPathPost;
 		String result = restService.callRestAPIPost(restUrl,restPath,jsonData);
