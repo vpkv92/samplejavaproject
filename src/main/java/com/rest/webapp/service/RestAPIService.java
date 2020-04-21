@@ -9,11 +9,10 @@ import java.net.URL;
 
 public class RestAPIService {
 	
-	public String callRestAPIPost(String restUrl) throws IOException {
+	public String callRestAPIPost(String restUrl,String restPath, String jsonData) throws IOException {
 		String result = null;
-		String jsonbody="{}";
 		try {
-		URL url = new URL(""+restUrl+"/process-definition/key/DemoCamunda/start");
+		URL url = new URL(""+restUrl+restPath);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		
 		conn.setRequestMethod("POST");
@@ -21,7 +20,7 @@ public class RestAPIService {
 		conn.setRequestProperty("Content-Type", "application/json");
 		conn.setDoOutput(true);
 		OutputStream os = conn.getOutputStream();
-		os.write(jsonbody.getBytes());
+		os.write(jsonData.getBytes());
 		os.flush();
 		os.close();
 		if (conn.getResponseCode() != 200) {

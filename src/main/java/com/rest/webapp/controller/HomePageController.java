@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.webapp.service.RestAPIService;
 import com.rest.webapp.util.ApplicationPropertiesUtil;
 import com.rest.webapp.vo.ProcessDefinition;
+import com.rest.webapp.vo.TaskList;
 
 public class HomePageController extends HttpServlet {
 
@@ -29,22 +30,35 @@ public class HomePageController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
-		Map<String,String> keyVersionMap ;
-		List<Map<String,String>> keyList = new ArrayList<Map<String,String>>();
+		//Map<String,String> keyVersionMap ;
+		//List<Map<String,String>> keyList = new ArrayList<Map<String,String>>();
+		List<ProcessDefinition> procList = new ArrayList<ProcessDefinition>();
+		List<TaskList> taskList = new ArrayList<TaskList>();
 		try {
 
 			ApplicationPropertiesUtil prop = new ApplicationPropertiesUtil();
 			String restUrl = prop.getRestUrl();
-			String restPath = prop.getProcDefList();
 			RestAPIService restService = new RestAPIService();
-			String result = restService.callRestAPIGet(restUrl, restPath);
 			ObjectMapper mapper = new ObjectMapper();
+			String restPath="";
+			String result="";
+			
+			restPath = prop.getProcDefList();
+			result = restService.callRestAPIGet(restUrl, restPath);
+			
 			ProcessDefinition[] procdefdata = mapper.readValue(result, ProcessDefinition[].class);
-			for (ProcessDefinition procdef : procdefdata) {
-				keyVersionMap= new HashMap<String,String>();
-				keyVersionMap.put("proc",procdef.getName());
-				keyVersionMap.put("version",Integer.toString(procdef.getVersion()));
-				keyList.add(keyVersionMap);
+			
+ 			for (ProcessDefinition procdef : procdefdata) {
+ 				procList.add(procdef);
+			}
+ 			
+ 			restPath = prop.getTaskList();
+			result = restService.callRestAPIGet(restUrl, restPath);
+			TaskList[] taskdata = mapper.readValue(result, TaskList[].class);
+			
+ 			for (TaskList task : taskdata) {
+ 				
+ 				taskList.add(task);
 			}
 
 		} catch (Exception e) {
@@ -53,38 +67,11 @@ public class HomePageController extends HttpServlet {
 
 		}
 
-		message = "Running Tasks are:<br><br>";
-
-		for (Map<String,String> kv : keyList) {
-			message = message +"<B>" +kv.get("proc")+"</B>" + "(Version - "+kv.get("version") + ")<br><br>";
-		}
-
-		request.setAttribute("message", message);
+		
+		request.setAttribute("procList", procList);
+		request.setAttribute("taskList", taskList);
 		RequestDispatcher view = request.getRequestDispatcher("welcome.jsp");
 		view.forward(request, response);
 	}
-	/*
-	 * @Override public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	 * throws ServletException, IOException { ApplicationPropertiesUtil prop = new
-	 * ApplicationPropertiesUtil(); String restUrl=prop.getRestUrl(); RestAPIService
-	 * restService = new RestAPIService(); String result =
-	 * restService.callRestAPIGet(restUrl); resp.setContentType("text/plain");
-	 * resp.getWriter().write("Hello World! Maven Web Project Example.");
-	 * resp.getWriter().write("\n\n");
-	 * 
-	 * resp.getWriter().write("Output of rest is" + result); }
-	 * 
-	 * @Override public void doPost(HttpServletRequest req, HttpServletResponse
-	 * resp) throws ServletException, IOException {
-	 * 
-	 * ApplicationPropertiesUtil prop = new ApplicationPropertiesUtil(); String
-	 * restUrl=prop.getRestUrl(); RestAPIService restService = new RestAPIService();
-	 * String result = restService.callRestAPIPost(restUrl);
-	 * resp.setContentType("text/plain");
-	 * resp.getWriter().write("Hello World! Maven Web Project Example.");
-	 * resp.getWriter().write("\n\n");
-	 * 
-	 * resp.getWriter().write("Output of rest is" + result); }
-	 */
-
+	
 }

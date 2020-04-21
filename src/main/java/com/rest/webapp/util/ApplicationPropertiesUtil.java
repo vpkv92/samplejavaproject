@@ -31,4 +31,17 @@ public class ApplicationPropertiesUtil {
 	public String getProcDefList() {
         return properties.getProperty("restapi.procdeflist");
     }
+
+	public String getTaskList() {
+		return properties.getProperty("restapi.tasklist");
+	}
+	
+	public String getTaskExecPre() {
+		return properties.getProperty("restapi.starttaskpre");
+	}
+	
+	public String getTaskExecPost() {
+		return properties.getProperty("restapi.starttaskpost");
+	}
 }
+	
