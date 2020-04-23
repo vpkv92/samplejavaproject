@@ -113,14 +113,12 @@ public class ProcessDetailsDao {
 			DBUtils dbUtils = new DBUtils();
 			DataSource ds = dbUtils.getDBConnection();
 			conn = ds.getConnection();
-			stmt = conn.prepareStatement("select msisdn from msisdn where msisdn = ? and status='Assigned'");
+			stmt = conn.prepareStatement("select count(msisdn) from msisdn where msisdn = ? and status='Assigned'");
 			stmt.setString(1, msisdn);
-			stmt.setString(2, msisdn);
-			stmt.setString(3, msisdn);
 			rs = stmt.executeQuery();
 			
-			while(rs.next())
-			{	
+			System.out.println(rs.getInt(1) + " are already there");
+			if(rs.getInt(1)>0) {
 				return true;
 			}
 
