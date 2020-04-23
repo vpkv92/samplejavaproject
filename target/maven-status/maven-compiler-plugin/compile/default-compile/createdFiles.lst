@@ -1,13 +1,7 @@
 com\rest\webapp\controller\RestApiHandler.class
-com\rest\webapp\vo\ProcessDefinition.class
-com\rest\webapp\vo\Msisdn.class
-com\rest\webapp\util\ApplicationPropertiesUtil.class
-com\rest\webapp\vo\CustId.class
-com\rest\webapp\vo\Protype.class
-com\rest\webapp\vo\Variables.class
-com\rest\webapp\util\DBUtils.class
-com\rest\webapp\dao\ProcessDetailsDao.class
 com\rest\webapp\service\RestAPIService.class
-com\rest\webapp\vo\JsonMaker.class
+com\rest\webapp\vo\ProcessDefinition.class
 com\rest\webapp\vo\TaskList.class
+com\rest\webapp\util\ApplicationPropertiesUtil.class
 com\rest\webapp\controller\HomePageController.class
+com\rest\webapp\util\DBUtils.class
