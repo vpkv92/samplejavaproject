@@ -93,28 +93,20 @@
 				<table class='table table-striped'>
 					<thead>
 						<tr>
-							<th>Task Name</th>
-							<th>Id</th>
-							<th>Task Definition Key</th>
-							<th>Assignee</th>
-							<th>Created</th>
-							<th>Due</th>
-							<th>Priority</th>
-							<th>Suspended</th>
+							<th>Customer Id</th>
+							<th>MSISDN</th>
+							<th>Camunda Request Id</th>
+							<th>Camunda Status</th>
 						</tr>
 					</thead>
 					<tbody>
 						<%
-						List<TaskList> task = (ArrayList<TaskList>) request.getAttribute("taskList");
-						for (TaskList taskLst : task) {
-							out.println("<tr><td>" + taskLst.getName() + "</td>");
-							out.println("<td>" + taskLst.getId() + "</td>");
-							out.println("<td>" + taskLst.getTaskDefinitionKey() + "</td>");
-							out.println("<td>" + taskLst.getAssignee() + "</td>");
-							out.println("<td>" + taskLst.getCreated() + "</td>");
-							out.println("<td>" + taskLst.getDue() + "</td>");
-							out.println("<td>" + taskLst.getPriority() + "</td>");
-							out.println("<td>" + taskLst.isSuspended() + "</td></tr>");
+						List<Map<String,String>> processTaskList = (ArrayList<Map<String,String>>)request.getAttribute("processTaskList");
+						for (Map<String,String> taskMap : processTaskList) {
+							out.println("<tr><td>" + taskMap.get("custId") + "</td>");
+							out.println("<td>" + taskMap.get("msisdn") + "</td>");
+							out.println("<td>" + taskMap.get("cmreqid") + "</td>");
+							out.println("<td>" + taskMap.get("cmstatus") + "</td></tr>");
 						}
 						%>
 					</tbody>

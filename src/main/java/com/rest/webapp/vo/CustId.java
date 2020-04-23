@@ -1,27 +1,21 @@
 package com.rest.webapp.vo;
 
 public class CustId {
-	 private long value;
-	 private String type;
+	 private String value;
 
 
 	 // Getter Methods 
 
-	 public long getValue() {
+	 public String getValue() {
 	  return value;
 	 }
 
-	 public String getType() {
-	  return type;
-	 }
 
 	 // Setter Methods 
 
-	 public void setValue(long value) {
+	 public void setValue(String value) {
 	  this.value = value;
 	 }
 
-	 public void setType(String type) {
-	  this.type = type;
-	 }
+
 }

@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rest.webapp.dao.ProcessDetailsDao;
 import com.rest.webapp.service.RestAPIService;
 import com.rest.webapp.util.ApplicationPropertiesUtil;
 import com.rest.webapp.vo.ProcessDefinition;
@@ -33,7 +34,9 @@ public class HomePageController extends HttpServlet {
 		//Map<String,String> keyVersionMap ;
 		//List<Map<String,String>> keyList = new ArrayList<Map<String,String>>();
 		List<ProcessDefinition> procList = new ArrayList<ProcessDefinition>();
-		List<TaskList> taskList = new ArrayList<TaskList>();
+		List<Map<String,String>> processTaskList = new ArrayList<Map<String,String>>();
+		//Map<String,String> taskstatusMap = null;
+		ProcessDetailsDao procDao = new ProcessDetailsDao();
 		try {
 
 			ApplicationPropertiesUtil prop = new ApplicationPropertiesUtil();
@@ -52,14 +55,17 @@ public class HomePageController extends HttpServlet {
  				procList.add(procdef);
 			}
  			
- 			restPath = prop.getTaskList();
-			result = restService.callRestAPIGet(restUrl, restPath);
-			TaskList[] taskdata = mapper.readValue(result, TaskList[].class);
+ 			//restPath = prop.getTaskList();
+			//result = restService.callRestAPIGet(restUrl, restPath);
+ 			//TaskList[] taskdata = mapper.readValue(result, TaskList[].class);
 			
- 			for (TaskList task : taskdata) {
- 				
- 				taskList.add(task);
-			}
+ 			processTaskList = procDao.FetchProcessStatus();
+ 			
+			/*
+			 * for (TaskList task : taskdata) {
+			 * 
+			 * taskList.add(task); }
+			 */
 
 		} catch (Exception e) {
 			// e.printStackTrace();
@@ -69,7 +75,7 @@ public class HomePageController extends HttpServlet {
 
 		
 		request.setAttribute("procList", procList);
-		request.setAttribute("taskList", taskList);
+		request.setAttribute("processTaskList", processTaskList);
 		RequestDispatcher view = request.getRequestDispatcher("welcome.jsp");
 		view.forward(request, response);
 	}
