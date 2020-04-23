@@ -33,7 +33,7 @@ String tskky=request.getParameter("task");
   </div>
   <div class="form-group">
     <label for="protype">Service Provider</label>
-    <input type="text" class="form-control" name="protype" placeholder="Enter Service Provider Code(P101/P102)">
+    <input type="text" class="form-control" name="protype" placeholder="Enter Service Provider Code(SP101/SP102)">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

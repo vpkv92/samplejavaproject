@@ -29,8 +29,8 @@ public class ProcessDetailsDao {
 			DataSource ds = dbUtils.getDBConnection();
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement("insert into process_status(custId,msisdn,cmreqid,cmstatus) values(?,?,?,?)");
-			int custId = Integer.parseInt((String) insertProcessMap.get("custId"));
-			stmt.setInt(1, custId);
+			//int custId = insertProcessMap.get("custId").toString());
+			stmt.setString(1, insertProcessMap.get("custId").toString());
 			stmt.setString(2, insertProcessMap.get("msisdn").toString());
 			stmt.setString(3, insertProcessMap.get("cmreqid").toString());
 			stmt.setString(4, insertProcessMap.get("cmstatus").toString());
