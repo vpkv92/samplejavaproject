@@ -32,7 +32,7 @@ public class ProcessDetailsDao {
 			//int custId = insertProcessMap.get("custId").toString());
 			stmt.setString(1, insertProcessMap.get("custId").toString());
 			stmt.setString(2, insertProcessMap.get("msisdn").toString());
-			stmt.setString(3, insertProcessMap.get("cmreqid").toString());
+			stmt.setString(3, insertProcessMap.get("cmreqid")==null?null: insertProcessMap.get("cmreqid").toString());
 			stmt.setString(4, insertProcessMap.get("cmstatus").toString());
 			int i = stmt.executeUpdate();
 			System.out.println(i + " records inserted");
@@ -80,9 +80,9 @@ public class ProcessDetailsDao {
 			}
 
 		} catch (NamingException ex) {
-			System.err.println(ex);
+			throw new RuntimeException(ex);
 		} catch (SQLException ex) {
-			System.err.println(ex);
+			throw new RuntimeException(ex);
 		} finally {
 			if (rs != null) {
 				rs.close();
@@ -105,7 +105,7 @@ public class ProcessDetailsDao {
 	
 	
 	public boolean verifyMsisdn(String msisdn) throws SQLException {
-
+		System.out.println("verifyMsisdn Start-->");
 		Connection conn = null;
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
@@ -113,19 +113,24 @@ public class ProcessDetailsDao {
 			DBUtils dbUtils = new DBUtils();
 			DataSource ds = dbUtils.getDBConnection();
 			conn = ds.getConnection();
-			stmt = conn.prepareStatement("select count(msisdn) from msisdn where msisdn = ? and status='Assigned'");
+			stmt = conn.prepareStatement("select count(msisdn) from msisdn where msisdn = ? and status='ASSIGNED' union"
+										+ " select count(msisdn) from process_status where msisdn = ? and cmstatus='Process Started in Camunda'");
 			stmt.setString(1, msisdn);
+			stmt.setString(2, msisdn);
 			rs = stmt.executeQuery();
 			
-			System.out.println(rs.getInt(1) + " are already there");
-			if(rs.getInt(1)>0) {
-				return true;
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1) + "is the status");
+				if(rs.getInt(1)>0) {
+					return true;
+				}
 			}
 
 		} catch (NamingException ex) {
-			System.err.println(ex);
+			throw new RuntimeException(ex);
 		} catch (SQLException ex) {
-			System.err.println(ex);
+			throw new RuntimeException(ex);
 		} finally {
 			if (rs != null) {
 				rs.close();

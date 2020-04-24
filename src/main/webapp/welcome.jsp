@@ -1,3 +1,4 @@
+<%@page import="com.google.protobuf.Empty"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*" %>
@@ -33,8 +34,8 @@
       <a class="navbar-brand" href="#">CamundaRestClient</a>
     </div>
         <ul class="nav nav-tabs" id="myTab">
-          <li class="active"><a data-toggle="tab" href="#sectionB">Running Processes</a></li>
-          <li><a data-toggle="tab" href="#sectionC">Running Instances</a></li>
+          <li class="active"><a data-toggle="tab" href="#sectionB">Processes</a></li>
+          <li><a data-toggle="tab" href="#sectionC">Running Status</a></li>
         </ul>
       </div>
     </nav>
@@ -61,11 +62,12 @@
 		<div class="tab-content">
 
 			<div id='sectionB' class='tab-pane fade in active'>
-				<h2>Running Processess</h2>
+				<h2>Processess</h2>
 				<form action="tasksubmission.jsp" method="post">
 				<table class='table table-striped'>
 					<thead>
 						<tr>
+							<th>Select Process</th>
 							<th>Process Name</th>
 							<th>Id</th>
 							<th>Version</th>
@@ -74,13 +76,25 @@
 					</thead>
 					<tbody>
 						<%
+						
 						List<ProcessDefinition> list2 = (ArrayList<ProcessDefinition>) request.getAttribute("procList");
 						for (ProcessDefinition procDef : list2) {
 							out.println("<tr><td><input type='radio' name='task' value='"+procDef.getKey()+"'></td>");
-							out.println("<td>" + procDef.getName() + "</td>");
-							out.println("<td>" + procDef.getId() + "</td>");
+							if(procDef.getName()==null)
+								out.println("<td></td>");
+							else
+								out.println("<td>" + procDef.getName()+ "</td>");
+							if(procDef.getId()==null)
+								out.println("<td></td>");
+							else
+								out.println("<td>" + procDef.getId() + "</td>");
+							
 							out.println("<td>" + procDef.getVersion() + "</td>");
-							out.println("<td>" + procDef.getKey() + "</td></tr>");
+							
+							if(procDef.getKey()==null)
+								out.println("<td></td></tr>");
+							else
+								out.println("<td>" + procDef.getKey() + "</td></tr>");
 						}
 						%>
 					</tbody>
@@ -89,7 +103,7 @@
 				</form>
 			</div>
 			<div id='sectionC' class='tab-pane fade'>
-				<h2>Running Instances</h2>
+				<h2>Running Status</h2>
 				<table class='table table-striped'>
 					<thead>
 						<tr>
@@ -103,10 +117,22 @@
 						<%
 						List<Map<String,String>> processTaskList = (ArrayList<Map<String,String>>)request.getAttribute("processTaskList");
 						for (Map<String,String> taskMap : processTaskList) {
-							out.println("<tr><td>" + taskMap.get("custId") + "</td>");
-							out.println("<td>" + taskMap.get("msisdn") + "</td>");
-							out.println("<td>" + taskMap.get("cmreqid") + "</td>");
-							out.println("<td>" + taskMap.get("cmstatus") + "</td></tr>");
+							if(taskMap.get("custId")==null)
+								out.println("<tr><td></td>");
+							else
+								out.println("<tr><td>"+taskMap.get("custId")+"</td>");
+							if(taskMap.get("msisdn")==null)
+								out.println("<td></td>");
+							else
+								out.println("<td>"+taskMap.get("msisdn")+"</td>");
+							if(taskMap.get("cmreqid")==null)
+								out.println("<td></td>");
+							else
+								out.println("<td>"+taskMap.get("cmreqid")+"</td>");
+							if(taskMap.get("cmstatus")==null)
+								out.println("<td></td></tr>");
+							else
+								out.println("<td>"+taskMap.get("cmstatus")+"</td></tr>");
 						}
 						%>
 					</tbody>

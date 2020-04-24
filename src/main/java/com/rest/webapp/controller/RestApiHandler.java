@@ -50,10 +50,12 @@ public class RestApiHandler extends HttpServlet {
 			Map<String, String> jsonMap = new HashMap<String, String>();
 			ProcessDetailsDao procDao = new ProcessDetailsDao();
 			Map<String, String> procDaoInsMap = new HashMap<String, String>();
+			
+			System.out.println("MSISDN status is being fetched");
 			boolean checkExistMSISDNAssgned = procDao.verifyMsisdn(req.getParameter("msisdn"));
 			
-			
-				if(!checkExistMSISDNAssgned) {
+			System.out.println("MSISDN status is"+checkExistMSISDNAssgned);
+				if(checkExistMSISDNAssgned==false) {
 				String restUrl = prop.getRestUrl();
 				String restPathPre = prop.getTaskExecPre();
 				String restPathPost = prop.getTaskExecPost();
@@ -105,9 +107,11 @@ public class RestApiHandler extends HttpServlet {
 				procDaoInsMap.put("custId", req.getParameter("custId"));
 				procDaoInsMap.put("msisdn", req.getParameter("msisdn"));
 				procDaoInsMap.put("cmreqid", null);
-				procDaoInsMap.put("cmstatus", "Failed - MSISDN Already in Use");
-				req.setAttribute("message", "Request Failed - "+req.getParameter("msisdn")+" is already assigned");
-				System.out.println("Request Failed - "+req.getParameter("msisdn")+" is already assigned");
+				procDaoInsMap.put("cmstatus", "Failed - MSISDN Assigned/Another Request in Progress");
+				req.setAttribute("message", "Request Failed - "+req.getParameter("msisdn")+" is already assigned or there is another request"
+						+ " running for the same MSISDN");
+				System.out.println("Request Failed - "+req.getParameter("msisdn")+" is already assignedor there is another request"
+						+ " running for the same MSISDN");
 			}
 			
 			
